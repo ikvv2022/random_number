@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генератор случайного числа</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+
+
+  <style>
+  #result {
+  text-align: center;
+  font-size: 44px;
+  font-weight: bold;
+  }</style>
+
+</head>
+
+
+<body>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <label for="min">Минимальное число:</label>
+        <input type="number" id="min" name="min" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label for="max">Максимальное число:</label>
+        <input type="number" id="max" name="max" class="form-control" required>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <div class="d-flex justify-content-center">
+		<button id="generate" class="btn btn-primary">Сгенерировать случайное число</button>
+		</div>
+        </br></br></br><p id="result"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Создаем массив для хранения сгенерированных чисел
+      var generatedNumbers = [];
+
+      // Функция для генерации случайного числа без повторений
+      function generateUniqueRandomNumber(min, max) {
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // Проверяем, есть ли уже сгенерированное число
+        if ($.inArray(randomNumber, generatedNumbers) !== -1) {
+          // Если число уже есть в массиве, генерируем новое число
+          return generateUniqueRandomNumber(min, max);
+        } else {
+          // Иначе добавляем число в массив и возвращаем его
+          generatedNumbers.push(randomNumber);
+          return randomNumber;
+        }
+      }
+
+      // Обработчик события клика на кнопку
+      $('#generate').click(function() {
+        // Получаем значения минимального и максимального чисел из полей ввода
+        var minNumber = parseInt($('#min').val());
+        var maxNumber = parseInt($('#max').val());
+
+        // Проверяем, что введены корректные числа
+        if (isNaN(minNumber) || isNaN(maxNumber)) {
+		  $('#result').css('font-size', '30px');
+          $('#result').text('Пожалуйста, введите корректные числа!');
+        } else if (minNumber >= maxNumber) {
+		  $('#result').css('font-size', '30px');
+          $('#result').text('Минимальное число должно быть меньше максимального числа!');
+        } else {
+          // Генерируем случайное число в заданном диапазоне
+          var randomNumber = generateUniqueRandomNumber(minNumber, maxNumber);
+
+          // Выводим сгенерированное число
+		  $('#result').css('font-size', '100px');
+		  
+		  
+		function generateRandomNumber(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		
+		// Используйте setInterval для генерации случайных чисел
+		var interval = setInterval(function() {
+			var randomNumber2 = generateRandomNumber(minNumber, maxNumber);
+			$('#result').text('' + randomNumber2);
+		}, 10);
+
+		// Остановите setInterval через 3 секунды
+		setTimeout(function() {
+			clearInterval(interval);
+			$('#result').text('' + randomNumber);
+			
+			$('#result').fadeOut(200, function() {
+            $(this).text('' + randomNumber).fadeIn(200);
+            });
+			
+		}, 1000);		  
+		  
+		  
+		  
+		  
+          //$('#result').text('' + randomNumber);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
